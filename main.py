@@ -8,8 +8,16 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Create client
-client = genai.Client()
+api_key = os.environ.get("GEMINI_API_KEY")
+
+if not api_key:
+    try:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except:
+        st.error("❌ API Key not found. Please set GEMINI_API_KEY in .env or Streamlit Secrets.")
+        st.stop()
+
+client = genai.Client(api_key=api_key)
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
